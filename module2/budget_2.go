@@ -62,7 +62,7 @@ func (b *Budget) AddItem(description string, price float32) error {
 		Price:       price,
 	}
 	b.Items = append(b.Items, newItem)
-	return nill
+	return nil
 }
 
 // RemoveItem removes a given item from the current budget
@@ -77,8 +77,13 @@ func (b *Budget) RemoveItem(description string) {
 
 // CreateBudget creates a new budget with a specified max
 func CreateBudget(month time.Month, max float32) (*Budget, error) {
+	_, hasEntry := report[month]
+	if hasEntry {
+		return nil, errDuplicateEntry
+	}
 	var newBudget *Budget
-
+	newBudget = &Budget{Max: max}
+	report[month] = newBudget
 	return newBudget, nil
 }
 
